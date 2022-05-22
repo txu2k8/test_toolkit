@@ -75,7 +75,7 @@ func initLogging() {
 		tlog.OptionSetConsoleLogLevel(consoleLoglevel),
 	)
 	conf.InitLogging()
-	logger.Infof("Args: platform %s", strings.Join(os.Args[1:], " "))
+	logger.Infof("Args: test_toolkit %s", strings.Join(os.Args[1:], " "))
 }
 
 func stripArgs() []string {
