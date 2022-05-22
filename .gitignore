@@ -4,6 +4,10 @@
 *.dll
 *.so
 *.dylib
+*.code-workspace
+log/*
+pkg/sdk_go/*
+pkg/sdk_admin_go/*
 
 # Test binary, built with `go test -c`
 *.test
