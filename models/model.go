@@ -10,11 +10,12 @@ type AliasConfig struct {
 
 // s3Config define S3 config
 type S3Config struct {
-	S3Ip        string // endpoint: https://<S3Ip>:<S3Port>, eg: https://10.25.119.86:443
-	S3Port      int    // port (default: 443)
-	Endpoint    string // Parse(S3Ip,S3Port) --> Endpoint
-	S3AccessID  string
-	S3SecretKey string
+	S3Ip   string // endpoint: https://<S3Ip>:<S3Port>, eg: https://10.25.119.86:443
+	S3Port int    // port (default: 443)
+
+	Endpoint  string // Parse(S3Ip,S3Port) --> Endpoint
+	AccessKey string
+	SecretKey string
 }
 
 type FileCreateInput struct {

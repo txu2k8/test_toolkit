@@ -15,11 +15,11 @@ import (
 )
 
 var (
-	logger   = logging.MustGetLogger("test")
-	runTimes int      // runTimes
-	debug    bool     // debug modle
-	caseList []string // Case List
-	s3Cfg    models.S3Config
+	logger      = logging.MustGetLogger("test")
+	repeatCount int      // repeat count
+	debug       bool     // console show debug modle
+	caseList    []string // Case List
+	s3Cfg       models.S3Config
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -43,22 +43,13 @@ func Execute() {
 }
 
 func init() {
-	// Here you will define your flags and configuration settings.
-	// Cobra supports persistent flags, which, if defined here,
-	// will be global for your application.
-
-	// rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.test_toolkit.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
-	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
-
-	rootCmd.PersistentFlags().IntVar(&runTimes, "run_times", 1, "Run test case with iteration loop")
+	rootCmd.PersistentFlags().IntVar(&repeatCount, "count", 1, "Run test case repeat count")
 	rootCmd.PersistentFlags().StringArrayVar(&caseList, "case", []string{}, "Test Case Array (default value in sub-command)")
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable console debug loglevel if true (default false)")
 
-	rootCmd.PersistentFlags().StringVar(&s3Cfg.S3AccessID, "s3_access_id", "", "S3 access ID")
-	rootCmd.PersistentFlags().StringVar(&s3Cfg.S3SecretKey, "s3_secret_key", "", "S3 access secret key")
+	rootCmd.PersistentFlags().StringVar(&s3Cfg.Endpoint, "endpoint", "", "S3 endpoint")
+	rootCmd.PersistentFlags().StringVar(&s3Cfg.AccessKey, "access-key", "", "S3 access ID")
+	rootCmd.PersistentFlags().StringVar(&s3Cfg.SecretKey, "secret-key", "", "S3 access secret key")
 
 }
 
