@@ -35,7 +35,11 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	initLogging()
+	// run test with log
+	if os.Args[1] == "test" {
+		initLogging()
+	}
+
 	err := rootCmd.Execute()
 	if err != nil {
 		os.Exit(1)
@@ -88,7 +92,6 @@ func stripArgs() []string {
 		switch {
 		case s == "--":
 			// "--" terminates the flags
-			break
 		case strings.HasPrefix(s, "--") && !strings.Contains(s, "="):
 			// If '--flag arg' then
 			// delete arg from args.
@@ -97,7 +100,7 @@ func stripArgs() []string {
 			// If '-f arg' then
 			// delete 'arg' from args or break the loop if len(args) <= 1.
 			if len(args) <= 1 {
-				break
+				//
 			} else {
 				args = args[1:]
 				continue

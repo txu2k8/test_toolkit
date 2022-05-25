@@ -29,9 +29,9 @@ var createFileCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(createFileCmd)
 
-	createFileCmd.PersistentFlags().StringVar(&createFileInput.LocalDataDir, "local_dir", config.RootDir+"/tmp/", "S3 test Local dir for save files")
-	createFileCmd.PersistentFlags().IntVar(&createFileInput.RandomPercent, "random_percent", 100, "S3 test Percent of files with random data")
-	createFileCmd.PersistentFlags().IntVar(&createFileInput.EmptyPercent, "empty_percent", 0, "S3 test Percent of files with empty data(0~100)% (default 0)")
-	createFileCmd.PersistentFlags().BoolVar(&createFileInput.RenameFile, "rename", false, "S3 test Rename files name each time if true (default false)")
-	createFileCmd.PersistentFlags().StringArrayVar(&createFileInput.FileArgs, "file_args", []string{"txt:20:1k-10k", "dd:1:1mb"}, "S3 test files config array")
+	createFileCmd.PersistentFlags().StringVar(&createFileInput.LocalDataDir, "local_dir", config.RootDir+"/tmp/", "Local dir for save files")
+	createFileCmd.PersistentFlags().IntVar(&createFileInput.RandomPercent, "random_percent", 100, "Percent of files with random data(0~100)% (default 100)")
+	createFileCmd.PersistentFlags().IntVar(&createFileInput.EmptyPercent, "empty_percent", 0, "Percent of files with empty data(0~100)% (default 0)")
+	createFileCmd.PersistentFlags().BoolVar(&createFileInput.RenameFile, "rename", false, "Rename files name every time if true (default false)")
+	createFileCmd.PersistentFlags().StringArrayVar(&createFileInput.FileArgs, "file_args", []string{"txt:20:1k-10k", "dd:1:1mb"}, "Files configs array")
 }

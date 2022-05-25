@@ -62,35 +62,35 @@ func CreateFiles(input models.FileCreateInput) []FileMeta {
 	var fileMd5 string
 
 	for _, fileConf := range cfgMap.CreateConfig {
-		fileUploadNamePrefix := fileConf.NamePrefix
+		fileNamePrefix := fileConf.NamePrefix
 		patternPrefix := fileConf.NamePrefix
 		emptyIdx := fileConf.Num * input.EmptyPercent / 100
 		randomIdx := fileConf.Num * input.RandomPercent / 100
-		fileUploadDir := path.Join(fileConf.ParentDir, "upload")
-		_, err := os.Stat(fileUploadDir)
+		fileDir := fileConf.ParentDir
+		_, err := os.Stat(fileDir)
 		if os.IsNotExist(err) {
-			err := os.MkdirAll(fileUploadDir, os.ModePerm)
+			err := os.MkdirAll(fileDir, os.ModePerm)
 			if err != nil {
 				logger.Panicf("mkdir failed![%v]", err)
 			}
 		}
 
 		// Get the exist files list
-		existFileInfoList, err := ioutil.ReadDir(fileUploadDir)
+		existFileInfoList, err := ioutil.ReadDir(fileDir)
 		if err != nil {
 			logger.Panicf("List local files fail: %s", err)
 		}
 
 		if input.RenameFile {
 			timeStr := time.Now().Format("20060102150405")
-			fileUploadNamePrefix += "_" + timeStr
+			fileNamePrefix += "_" + timeStr
 			patternPrefix += "_\\d{14}"
 		}
 
 		for i := 0; i < fileConf.Num; i++ {
 			uploadFile := FileMeta{}
-			fileName := fmt.Sprintf("%s_%d.%s", fileUploadNamePrefix, i, fileConf.Type)
-			filePath := path.Join(fileUploadDir, fileName)
+			fileName := fmt.Sprintf("%s_%d.%s", fileNamePrefix, i, fileConf.Type)
+			filePath := path.Join(fileDir, fileName)
 			// os.Rename the exist file with diff timeStr
 			if input.RenameFile {
 				pattern := fmt.Sprintf("%s_%d.%s", patternPrefix, i, fileConf.Type)
@@ -98,7 +98,7 @@ func CreateFiles(input models.FileCreateInput) []FileMeta {
 					existFileName := existFile.Name()
 					matched, _ := regexp.MatchString(pattern, existFileName)
 					if matched {
-						existFilePath := path.Join(fileUploadDir, existFileName)
+						existFilePath := path.Join(fileDir, existFileName)
 						logger.Infof("os.Rename: %s -> %s", existFilePath, filePath)
 						os.Rename(existFilePath, filePath)
 						break
@@ -114,7 +114,7 @@ func CreateFiles(input models.FileCreateInput) []FileMeta {
 			}
 
 			fExist, _ := utils.PathExists(filePath)
-			if (i < randomIdx) && (fExist == true) {
+			if (i < randomIdx) && fExist {
 				fileMd5 = utils.GetFileMd5sumWithPath(filePath)
 			} else {
 				fileMd5 = utils.CreateFile(filePath, randomSize, 128, mode)
