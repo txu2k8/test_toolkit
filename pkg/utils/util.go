@@ -7,6 +7,7 @@ import (
 	"crypto/rand"
 	"encoding/gob"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -27,8 +28,10 @@ import (
 
 	"github.com/op/go-logging"
 	"github.com/qianlnk/pgbar"
+	"github.com/rs/zerolog/log"
 	uuid "github.com/satori/go.uuid"
 	"github.com/schollz/progressbar/v3"
+	"gopkg.in/yaml.v2"
 )
 
 var logger = logging.MustGetLogger("test")
@@ -510,4 +513,118 @@ func MaxInt(x, y int) int {
 		return x
 	}
 	return y
+}
+
+func CreateFolder(folderPath string) error {
+	// log.Info().Str("path", folderPath).Msg("create folder")
+	logger.Infof("Create folder %s", fmt.Sprint(folderPath))
+	err := os.MkdirAll(folderPath, os.ModePerm)
+	if err != nil {
+		// log.Error().Err(err).Msg("create folder failed")
+		logger.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+//
+func CreateFile2(filePath string, data string) error {
+	// log.Info().Str("path", filePath).Msg("create file")
+	logger.Infof("Create file %s", fmt.Sprint(filePath))
+	err := os.WriteFile(filePath, []byte(data), 0o644)
+	if err != nil {
+		// log.Error().Err(err).Msg("create file failed")
+		logger.Error(err.Error())
+		return err
+	}
+	return nil
+}
+
+// IsPathExists returns true if path exists, whether path is file or dir
+func IsPathExists(path string) bool {
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return false
+	}
+	return true
+}
+
+// IsFilePathExists returns true if path exists and path is file
+func IsFilePathExists(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		// path not exists
+		return false
+	}
+
+	// path exists
+	if info.IsDir() {
+		// path is dir, not file
+		return false
+	}
+	return true
+}
+
+// IsFolderPathExists returns true if path exists and path is folder
+func IsFolderPathExists(path string) bool {
+	info, err := os.Stat(path)
+	if err != nil {
+		// path not exists
+		return false
+	}
+
+	// path exists and is dir
+	return info.IsDir()
+}
+
+func EnsureFolderExists(folderPath string) error {
+	if !IsPathExists(folderPath) {
+		err := CreateFolder(folderPath)
+		return err
+	} else if IsFilePathExists(folderPath) {
+		return fmt.Errorf("path %v should be directory", folderPath)
+	}
+	return nil
+}
+
+func Dump2JSON(data interface{}, path string) error {
+	path, err := filepath.Abs(path)
+	if err != nil {
+		log.Error().Err(err).Msg("convert absolute path failed")
+		return err
+	}
+	log.Info().Str("path", path).Msg("dump data to json")
+	file, _ := json.MarshalIndent(data, "", "    ")
+	err = os.WriteFile(path, file, 0o644)
+	if err != nil {
+		log.Error().Err(err).Msg("dump json path failed")
+		return err
+	}
+	return nil
+}
+
+func Dump2YAML(data interface{}, path string) error {
+	path, err := filepath.Abs(path)
+	if err != nil {
+		log.Error().Err(err).Msg("convert absolute path failed")
+		return err
+	}
+	log.Info().Str("path", path).Msg("dump data to yaml")
+
+	// init yaml encoder
+	buffer := new(bytes.Buffer)
+	encoder := yaml.NewEncoder(buffer)
+	// encoder.SetIndent(4)
+
+	// encode
+	err = encoder.Encode(data)
+	if err != nil {
+		return err
+	}
+
+	err = os.WriteFile(path, buffer.Bytes(), 0o644)
+	if err != nil {
+		log.Error().Err(err).Msg("dump yaml path failed")
+		return err
+	}
+	return nil
 }

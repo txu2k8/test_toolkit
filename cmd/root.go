@@ -51,10 +51,9 @@ func init() {
 	rootCmd.PersistentFlags().StringArrayVar(&caseList, "case", []string{}, "Test Case Array (default value in sub-command)")
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable console debug loglevel if true (default false)")
 
-	rootCmd.PersistentFlags().StringVar(&s3Cfg.Endpoint, "endpoint", "", "S3 endpoint")
-	rootCmd.PersistentFlags().StringVar(&s3Cfg.AccessKey, "access-key", "", "S3 access ID")
-	rootCmd.PersistentFlags().StringVar(&s3Cfg.SecretKey, "secret-key", "", "S3 access secret key")
-
+	rootCmd.PersistentFlags().StringVar(&s3Cfg.Endpoint, "endpoint", "", "S3 Endpoint")
+	rootCmd.PersistentFlags().StringVar(&s3Cfg.AccessKey, "access-key", "", "S3 Access Key")
+	rootCmd.PersistentFlags().StringVar(&s3Cfg.SecretKey, "secret-key", "", "S3 Secret Key")
 }
 
 // initLogging initialize the logging configs

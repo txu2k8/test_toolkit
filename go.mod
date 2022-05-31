@@ -9,9 +9,11 @@ require (
 	github.com/mattn/go-runewidth v0.0.13
 	github.com/op/go-logging v0.0.0-20160315200505-970db520ece7
 	github.com/qianlnk/pgbar v0.0.0-20210208085217-8c19b9f2477e
+	github.com/rs/zerolog v1.26.1
 	github.com/satori/go.uuid v1.2.0
 	github.com/schollz/progressbar/v3 v3.8.6
 	github.com/spf13/cobra v1.4.0
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 require (
@@ -33,6 +35,5 @@ require (
 	golang.org/x/sys v0.0.0-20220412211240-33da011f77ad // indirect
 	golang.org/x/term v0.0.0-20210927222741-03fcf44c2211 // indirect
 	gopkg.in/check.v1 v1.0.0-20200902074654-038fdea0a05b // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )

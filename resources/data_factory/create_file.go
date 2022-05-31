@@ -56,7 +56,7 @@ func ParseFileCreateInput(input models.FileCreateInput) models.FileCreateConfigM
 func CreateFiles(input models.FileCreateInput) []FileMeta {
 	cfgMap := ParseFileCreateInput(input)
 	logger.Info("> Prepare data files ...")
-	var fileArr []FileMeta
+	var fileMetaArr []FileMeta
 	var randomSize int64
 	var mode string = "a+"
 	var fileMd5 string
@@ -88,7 +88,7 @@ func CreateFiles(input models.FileCreateInput) []FileMeta {
 		}
 
 		for i := 0; i < fileConf.Num; i++ {
-			uploadFile := FileMeta{}
+			newFile := FileMeta{}
 			fileName := fmt.Sprintf("%s_%d.%s", fileNamePrefix, i, fileConf.Type)
 			filePath := path.Join(fileDir, fileName)
 			// os.Rename the exist file with diff timeStr
@@ -120,13 +120,13 @@ func CreateFiles(input models.FileCreateInput) []FileMeta {
 				fileMd5 = utils.CreateFile(filePath, randomSize, 128, mode)
 			}
 
-			uploadFile.FileName = fileName
-			uploadFile.FileFullPath = filePath
-			uploadFile.FileSize = randomSize
-			uploadFile.FileMd5sum = fileMd5
+			newFile.FileName = fileName
+			newFile.FileFullPath = filePath
+			newFile.FileSize = randomSize
+			newFile.FileMd5sum = fileMd5
 			logger.Infof("Local File(md5:%s):%s", fileMd5, filePath)
-			fileArr = append(fileArr, uploadFile)
+			fileMetaArr = append(fileMetaArr, newFile)
 		}
 	}
-	return fileArr
+	return fileMetaArr
 }
